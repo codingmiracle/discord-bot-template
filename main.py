@@ -1,6 +1,7 @@
 import os
 
 import discord
+from discord import app_commands
 from dotenv import load_dotenv
 
 intents = discord.Intents.default()
@@ -14,11 +15,21 @@ embed = discord.Embed(
     color=0x1e1e1e
 )
 embed.add_field(name="Name `highlighted`:",
-                     value="value of Field"
-)
+                value="value of Field"
+                )
+
+tree = app_commands.CommandTree(client)
+
+
+@tree.command(name="cmd", description="My first application Command", guild=discord.Object(id=928336424514752534))
+async def first_command(interaction):
+    await interaction.response.send_message("Reacted 2 Command")
+
 
 @client.event
 async def on_ready():
+    print(client.guilds)
+    await tree.sync(guild=discord.Object(id=928336424514752534))
     print(f'We have logged in as {client.user}')
 
 
@@ -29,7 +40,7 @@ async def on_message(message):
 
     if message.content.startswith('/'):
         prompt = message.content[1:]
-        print(prompt)
+        print(message.guild.id)
         if prompt.startswith('hello'):
             await message.channel.send("Hello!")
         if prompt.startswith('embed'):
