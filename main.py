@@ -8,6 +8,14 @@ intents.message_content = True
 
 client = discord.Client(intents=intents)
 
+embed = discord.Embed(
+    title="Title",
+    description="description",
+    color=0x1e1e1e
+)
+embed.add_field(name="Name `highlighted`:",
+                     value="value of Field"
+)
 
 @client.event
 async def on_ready():
@@ -24,6 +32,8 @@ async def on_message(message):
         print(prompt)
         if prompt.startswith('hello'):
             await message.channel.send("Hello!")
+        if prompt.startswith('embed'):
+            await message.channel.send(embed=embed)
 
 
 if __name__ == '__main__':
